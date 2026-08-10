@@ -374,50 +374,26 @@ function resetForm() {
 // ===============================
 
 function showPopup(title, message, type) {
-
-    const popupOverlay =
-        document.getElementById("popupOverlay");
-
-    const popupTitle =
-        document.getElementById("popupTitle");
-
-    const popupMessage =
-        document.getElementById("popupMessage");
-
-    const popupIcon =
-        document.getElementById("popupIcon");
-
+    const popupOverlay = document.getElementById("popupOverlay");
+    const popupBox = document.getElementById("popupBox");
+    const popupTitle = document.getElementById("popupTitle");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupIcon = document.getElementById("popupIcon");
 
     popupTitle.innerText = title;
-
     popupMessage.innerText = message;
 
-
-    // SUCCESS
     if (type === "success") {
-
+        popupBox.className = "popup-box success";
         popupIcon.innerText = "✓";
-
-        popupIcon.style.background = "#e8f5e9";
-
-        popupIcon.style.color = "#2e7d32";
-
-    }
-
-    // ERROR
-    else {
-
+    } else {
+        popupBox.className = "popup-box error";
         popupIcon.innerText = "✕";
-
-        popupIcon.style.background = "#ffebee";
-
-        popupIcon.style.color = "#c62828";
-
     }
-
 
     popupOverlay.style.display = "flex";
 }
+
 
 
 // ===============================
