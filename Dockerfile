@@ -2,6 +2,8 @@ FROM eclipse-temurin
 
 WORKDIR /app
 
+RUN mkdir /app/data
+
 COPY target/DockerL-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 9090
