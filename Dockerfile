@@ -2,7 +2,7 @@ FROM eclipse-temurin
 
 WORKDIR /app
 
-RUN mkdir /app/data
+RUN mkdir -p /app/data
 
 COPY target/DockerL-0.0.1-SNAPSHOT.jar app.jar
 
