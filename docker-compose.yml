@@ -1,21 +1,31 @@
 services:
+
   app:
     build: .
     ports:
       - "8080:9090"
-
     container_name: my_app_container
-
     env_file:
       - .env
+    depends_on:
+      - mysql
+#    volumes:
+#      - name-volume:/app/data
+
+  mysql:
+    image: mysql:latest
+    container_name: test-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
     environment:
-      - DB_HOST=host.docker.internal
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-
-    volumes:
-      - name-volume:/app/data
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: finance_db
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
 
 volumes:
-  name-volume:
+#  name-volume:
+  mysql_data:
