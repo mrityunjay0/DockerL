@@ -6,14 +6,16 @@ import com.example.docker.DockerL.entity.Student;
 import com.example.docker.DockerL.exception.DuplicateEmailException;
 import com.example.docker.DockerL.exception.StudentNotFoundException;
 import com.example.docker.DockerL.repository.StudentRepository;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class StudentServicesImpl implements StudentServices {
 
     private final StudentRepository studentRepository;
+    public static final Logger logger = (Logger) LoggerFactory.getLogger(StudentServicesImpl.class);
 
     public StudentServicesImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -26,6 +28,9 @@ public class StudentServicesImpl implements StudentServices {
         if (studentRepository.existsByEmail(studentRequestDto.getEmail())) {
             throw new DuplicateEmailException("Email already exists: " + studentRequestDto.getEmail());
         }
+
+        logger.info("Creating student with email: " + studentRequestDto.getEmail());
+        simulateSlowOperation();
 
         Student student = new Student();
         student.setFirstName(studentRequestDto.getFirstName());
@@ -53,6 +58,10 @@ public class StudentServicesImpl implements StudentServices {
     public List<StudentResponseDto> getAllStudents() {
 
         List<Student> students = studentRepository.findAll();
+
+        logger.info("Retrieved " + students.size() + " students from the database");
+        simulateSlowOperation();
+
         return students.stream().map(student -> {
             StudentResponseDto studentResponseDto = new StudentResponseDto();
             studentResponseDto.setId(student.getId());
@@ -71,6 +80,9 @@ public class StudentServicesImpl implements StudentServices {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
+
+        logger.info("Retrieved student with id: " + studentId);
+        simulateSlowOperation();
 
         StudentResponseDto studentResponseDto = new StudentResponseDto();
         studentResponseDto.setId(student.getId());
@@ -95,6 +107,9 @@ public class StudentServicesImpl implements StudentServices {
                     "Email " + studentRequestDto.getEmail() + " is already used by another student"
             );
         }
+
+        logger.info("Updating student with id: " + studentId + " to have email: " + studentRequestDto.getEmail());
+        simulateSlowOperation();
 
         student.setFirstName(studentRequestDto.getFirstName());
         student.setLastName(studentRequestDto.getLastName());
@@ -124,6 +139,17 @@ public class StudentServicesImpl implements StudentServices {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + studentId));
 
+        logger.info("Deleting student with id: " + studentId);
+        simulateSlowOperation();
+
         studentRepository.delete(student);
+    }
+
+    private void simulateSlowOperation() {
+        try {
+            Thread.sleep(500); // Simulate a .5-second delay
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
