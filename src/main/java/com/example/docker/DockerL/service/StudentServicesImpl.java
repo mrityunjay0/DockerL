@@ -147,7 +147,7 @@ public class StudentServicesImpl implements StudentServices {
 
     private void simulateSlowOperation() {
         try {
-            Thread.sleep(500); // Simulate a .5-second delay
+            Thread.sleep(1000); // Simulate a 1-second delay
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
