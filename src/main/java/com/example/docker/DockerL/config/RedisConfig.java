@@ -1,109 +1,56 @@
 package com.example.docker.DockerL.config;
 
-import com.example.docker.DockerL.dto.StudentResponseDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import tools.jackson.databind.JavaType;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 
 @Configuration
 public class RedisConfig {
 
     @Bean
-    public RedisCacheManager cacheManager(
-            RedisConnectionFactory redisConnectionFactory,
-            ObjectMapper objectMapper) {
+    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
-        // --------------------------------------------------
-        // Serializer for List<StudentResponseDto>
-        // --------------------------------------------------
+        // 1. Create a validator that allows all classes to be serialized/deserialized
+        BasicPolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+                .allowIfBaseType(Object.class)
+                .build();
 
-        JavaType listType = objectMapper.getTypeFactory()
-                .constructCollectionType(
-                        List.class,
-                        StudentResponseDto.class
-                );
+        // 2. Use JsonMapper.builder() for Jackson 3
+        // We explicitly set As.WRAPPER_ARRAY to handle List collections securely
+        ObjectMapper redisMapper = JsonMapper.builder()
+                .activateDefaultTyping(ptv, DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_ARRAY)
+                .build();
 
-        JacksonJsonRedisSerializer<List<StudentResponseDto>> listSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        objectMapper,
-                        listType
-                );
+        // 3. Pass our custom mapper into the generic serializer
+        GenericJacksonJsonRedisSerializer serializer = new GenericJacksonJsonRedisSerializer(redisMapper);
 
-        // --------------------------------------------------
-        // Serializer for StudentResponseDto
-        // --------------------------------------------------
-
-        JavaType studentType = objectMapper.getTypeFactory()
-                .constructType(StudentResponseDto.class);
-
-        JacksonJsonRedisSerializer<StudentResponseDto> studentSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        objectMapper,
-                        studentType
-                );
-
-        // --------------------------------------------------
-        // Common configuration
-        // --------------------------------------------------
-
-        RedisCacheConfiguration commonConfiguration =
+        // 4. Configure the cache settings globally
+        RedisCacheConfiguration cacheConfiguration =
                 RedisCacheConfiguration.defaultCacheConfig()
                         .entryTtl(Duration.ofMinutes(10))
                         .disableCachingNullValues()
                         .serializeKeysWith(
-                                RedisSerializationContext.SerializationPair
-                                        .fromSerializer(
-                                                new StringRedisSerializer()
-                                        )
+                                RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+                        )
+                        .serializeValuesWith(
+                                RedisSerializationContext.SerializationPair.fromSerializer(serializer)
                         );
 
-        // --------------------------------------------------
-        // Configuration for "students" cache
-        // --------------------------------------------------
-
-        RedisCacheConfiguration studentsCacheConfiguration =
-                commonConfiguration.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(listSerializer)
-                );
-
-        // --------------------------------------------------
-        // Configuration for "student" cache
-        // --------------------------------------------------
-
-        RedisCacheConfiguration studentCacheConfiguration =
-                commonConfiguration.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(studentSerializer)
-                );
-
-        // --------------------------------------------------
-        // Cache Manager
-        // --------------------------------------------------
-
+        // 5. Build and return the Cache Manager
         return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheWriter(RedisCacheWriter.nonLockingRedisCacheWriter(
-                        redisConnectionFactory
-                ))
-                .cacheDefaults(commonConfiguration)
-                .withInitialCacheConfigurations(
-                        Map.of(
-                                "students", studentsCacheConfiguration,
-                                "student", studentCacheConfiguration
-                        )
-                )
+                .cacheDefaults(cacheConfiguration)
                 .build();
     }
 }

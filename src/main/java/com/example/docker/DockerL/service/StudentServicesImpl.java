@@ -74,7 +74,7 @@ public class StudentServicesImpl implements StudentServices {
             studentResponseDto.setAddress(student.getAddress());
             studentResponseDto.setGrade(student.getGrade());
             return studentResponseDto;
-        }).toList();
+        }).collect(java.util.stream.Collectors.toList());
     }
 
     @Cacheable(value = "student", key = "#studentId")
