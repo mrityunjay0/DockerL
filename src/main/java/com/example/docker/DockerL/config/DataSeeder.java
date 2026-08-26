@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Configuration
 public class DataSeeder {
@@ -25,7 +25,7 @@ public class DataSeeder {
             student1.setFirstName("Rahul");
             student1.setLastName("Sharma");
             student1.setEmail("rahul.sharma@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student1.setAddress("Pune, Maharashtra");
             student1.setGrade(1);
 
@@ -33,7 +33,7 @@ public class DataSeeder {
             student2.setFirstName("Priya");
             student2.setLastName("Singh");
             student2.setEmail("priya.singh@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student2.setAddress("Bangalore, Karnataka");
             student2.setGrade(2);
 
@@ -41,7 +41,7 @@ public class DataSeeder {
             student3.setFirstName("Amit");
             student3.setLastName("Kumar");
             student3.setEmail("amit.kumar@gmail.com");
-            student3.setDateOfBirth(new Date(2003, 02, 10));
+            student3.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student3.setAddress("Delhi, India");
             student3.setGrade(3);
 
@@ -49,7 +49,7 @@ public class DataSeeder {
             student4.setFirstName("Sneha");
             student4.setLastName("Verma");
             student4.setEmail("sneha.verma@gmail.com");
-            student4.setDateOfBirth(new Date(2002, 11, 5));
+            student4.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student4.setAddress("Mumbai, Maharashtra");
             student4.setGrade(4);
 
@@ -57,7 +57,7 @@ public class DataSeeder {
             student5.setFirstName("Arjun");
             student5.setLastName("Patel");
             student5.setEmail("arjun.patel@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student5.setAddress("Ahmedabad, Gujarat");
             student5.setGrade(5);
 
@@ -65,7 +65,7 @@ public class DataSeeder {
             student6.setFirstName("Ananya");
             student6.setLastName("Reddy");
             student6.setEmail("ananya.reddy@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student6.setAddress("Hyderabad, Telangana");
             student6.setGrade(6);
 
@@ -73,7 +73,7 @@ public class DataSeeder {
             student7.setFirstName("Vikash");
             student7.setLastName("Mishra");
             student7.setEmail("vikash.mishra@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student7.setAddress("Patna, Bihar");
             student7.setGrade(7);
 
@@ -81,7 +81,7 @@ public class DataSeeder {
             student8.setFirstName("Neha");
             student8.setLastName("Gupta");
             student8.setEmail("neha.gupta@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student8.setAddress("Jaipur, Rajasthan");
             student8.setGrade(8);
 
@@ -89,7 +89,7 @@ public class DataSeeder {
             student9.setFirstName("Rohan");
             student9.setLastName("Mehta");
             student9.setEmail("rohan.mehta@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student9.setAddress("Surat, Gujarat");
             student9.setGrade(9);
 
@@ -97,7 +97,7 @@ public class DataSeeder {
             student10.setFirstName("Kavya");
             student10.setLastName("Nair");
             student10.setEmail("kavya.nair@gmail.com");
-            student1.setDateOfBirth(new Date(2000,05,15));
+            student1.setDateOfBirth(LocalDate.of(2001, 3, 20));
             student10.setAddress("Kochi, Kerala");
             student10.setGrade(10);
 

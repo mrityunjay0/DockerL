@@ -2,7 +2,7 @@ package com.example.docker.DockerL.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Student {
@@ -16,14 +16,14 @@ public class Student {
 
     @Column(unique = true, nullable = false)
     private String email;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
     private int grade;
 
     public Student() {
     }
 
-    public Student(Long id, String firstName, String lastName, String email, Date dateOfBirth, String address, int grade) {
+    public Student(Long id, String firstName, String lastName, String email, LocalDate dateOfBirth, String address, int grade) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -65,11 +65,11 @@ public class Student {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -1,6 +1,6 @@
 package com.example.docker.DockerL.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class StudentResponseDto {
 
@@ -8,14 +8,14 @@ public class StudentResponseDto {
     private String firstName;
     private String lastName;
     private String email;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
     private int grade;
 
     public StudentResponseDto() {
     }
 
-    public StudentResponseDto(Long id, String firstName, String lastName, String email, Date dateOfBirth, String address, int grade) {
+    public StudentResponseDto(Long id, String firstName, String lastName, String email, LocalDate dateOfBirth, String address, int grade) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,11 +57,11 @@ public class StudentResponseDto {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -2,7 +2,8 @@ package com.example.docker.DockerL.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+//import java.util.Date;
 
 public class StudentRequestDto {
 
@@ -18,7 +19,7 @@ public class StudentRequestDto {
 
     @NotNull(message = "Date of birth is required")
     @Past(message = "Date of birth must be in the past")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @NotBlank(message = "Address is required")
     private String address;
@@ -31,7 +32,7 @@ public class StudentRequestDto {
     public StudentRequestDto() {
     }
 
-    public StudentRequestDto(String firstName, String lastName, String email, Date dateOfBirth, String address, int grade) {
+    public StudentRequestDto(String firstName, String lastName, String email, LocalDate dateOfBirth, String address, int grade) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -64,11 +65,11 @@ public class StudentRequestDto {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
