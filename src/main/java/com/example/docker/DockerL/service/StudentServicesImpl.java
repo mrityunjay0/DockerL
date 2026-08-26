@@ -8,7 +8,10 @@ import com.example.docker.DockerL.exception.StudentNotFoundException;
 import com.example.docker.DockerL.repository.StudentRepository;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class StudentServicesImpl implements StudentServices {
     }
 
 
+    @CacheEvict(value = "students", allEntries = true)
     @Override
     public StudentResponseDto createStudent(StudentRequestDto studentRequestDto) {
 
@@ -98,6 +102,10 @@ public class StudentServicesImpl implements StudentServices {
         return studentResponseDto;
     }
 
+    @Caching(
+            put = @CachePut(value = "student", key = "#studentId"),
+            evict = @CacheEvict(value = "students", allEntries = true)
+    )
     @Override
     public StudentResponseDto updateStudent(StudentRequestDto studentRequestDto, Long studentId) {
 
@@ -136,6 +144,10 @@ public class StudentServicesImpl implements StudentServices {
 
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "student", key = "#studentId"),
+            @CacheEvict(value = "students", allEntries = true)
+    })
     @Override
     public void deleteStudent(Long studentId) {
 

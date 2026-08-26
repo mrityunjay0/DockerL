@@ -37,9 +37,8 @@ public class RedisConfig {
         GenericJacksonJsonRedisSerializer serializer = new GenericJacksonJsonRedisSerializer(redisMapper);
 
         // 4. Configure the cache settings globally
-        RedisCacheConfiguration cacheConfiguration =
+        RedisCacheConfiguration baseConfig =
                 RedisCacheConfiguration.defaultCacheConfig()
-                        .entryTtl(Duration.ofMinutes(10))
                         .disableCachingNullValues()
                         .serializeKeysWith(
                                 RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
@@ -48,9 +47,24 @@ public class RedisConfig {
                                 RedisSerializationContext.SerializationPair.fromSerializer(serializer)
                         );
 
+        // Individual student cache → 30 minutes
+        RedisCacheConfiguration studentConfig =
+                baseConfig.entryTtl(Duration.ofMinutes(30));
+
+        // All students list cache → 5 minutes
+        RedisCacheConfiguration studentsConfig =
+                baseConfig.entryTtl(Duration.ofMinutes(5));
+
+        // Default cache → 10 minutes
+        RedisCacheConfiguration defaultConfig =
+                baseConfig.entryTtl(Duration.ofMinutes(10));
+
+
         // 5. Build and return the Cache Manager
         return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(cacheConfiguration)
+                .cacheDefaults(defaultConfig)
+                .withCacheConfiguration("student", studentConfig)
+                .withCacheConfiguration("students", studentsConfig)
                 .build();
     }
 }
