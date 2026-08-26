@@ -8,6 +8,7 @@ import com.example.docker.DockerL.exception.StudentNotFoundException;
 import com.example.docker.DockerL.repository.StudentRepository;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class StudentServicesImpl implements StudentServices {
         return studentResponseDto;
     }
 
+    @Cacheable(value = "students")
     @Override
     public List<StudentResponseDto> getAllStudents() {
 
@@ -75,6 +77,7 @@ public class StudentServicesImpl implements StudentServices {
         }).toList();
     }
 
+    @Cacheable(value = "student", key = "#studentId")
     @Override
     public StudentResponseDto getStudentById(Long studentId) {
 
