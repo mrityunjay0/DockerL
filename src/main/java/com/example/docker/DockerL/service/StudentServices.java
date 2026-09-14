@@ -2,7 +2,6 @@ package com.example.docker.DockerL.service;
 
 import com.example.docker.DockerL.dto.StudentRequestDto;
 import com.example.docker.DockerL.dto.StudentResponseDto;
-import com.example.docker.DockerL.entity.Student;
 
 import java.util.List;
 
